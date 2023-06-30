@@ -68,12 +68,12 @@ def main():
         if not len(img_eye_net_resize):
             continue
 
-        # TODO 获取双眼色差
+        # TODO obtain luminance difference
         iris_l, iris_l_mask, num_l = segment_iris(img_eye[0], img_eye_mask[0])
         iris_r, iris_r_mask, num_r = segment_iris(img_eye[1], img_eye_mask[1])
 
         if (num_l+num_r)/2 <= 90:
-            # TODO 我的增强方法
+            # TODO the enhanced red channel
             eye_GrayRed_l = (img_eye_net_resize[0][..., 2] - img_eye_net_resize[0][..., 1] * 0.587 - img_eye_net_resize[0][..., 0] * 0.114) / 0.299
             eye_GrayRed_l = np.clip(eye_GrayRed_l, 0, 255)
             eye_GrayRed_l = cv2.cvtColor(eye_GrayRed_l.astype(np.uint8), cv2.COLOR_GRAY2RGB)
@@ -105,7 +105,7 @@ def main():
         bIou_l = get_fit(pred_pupil_mask_left)
         bIou_r = get_fit(pred_pupil_mask_right)
 
-        # TODO 将预测边框画在眼部图片上
+        # TODO result
         i, j = os.path.splitext(input_file.split('\\')[-1])
         origin_imgl_Contour = get_draw_img(pred_pupil_mask_left, img_eye_net_resize[0])
         origin_imgr_Contour = get_draw_img(pred_pupil_mask_right, img_eye_net_resize[1])
